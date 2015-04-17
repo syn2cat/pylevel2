@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='pylevel2',
-    version='1.0',
+    version='1.1',
     author='Raphaël Vinot',
     author_email='raphael.vinot@gmail.com',
     maintainer='Raphaël Vinot',
