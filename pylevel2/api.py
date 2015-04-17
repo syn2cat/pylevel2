@@ -11,9 +11,9 @@ import json
 class DatetimeEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
-            return obj.strftime('%Y-%m-%d %H:%M:%S')
+            return obj.isoformat(' ')
         elif isinstance(obj, date):
-            return obj.strftime('%Y-%m-%d')
+            return obj.isoformat()
         # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, obj)
 
