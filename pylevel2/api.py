@@ -3,8 +3,19 @@
 
 import requests
 import urlparse
-from datetime import datetime
+from datetime import datetime, date
 import os
+import json
+
+
+class DatetimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.strftime('%Y-%m-%d %H:%M:%S')
+        elif isinstance(obj, date):
+            return obj.strftime('%Y-%m-%d')
+        # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, obj)
 
 
 class PyLevel2(object):
@@ -17,7 +28,7 @@ class PyLevel2(object):
         self.session = requests.Session()
         self.session.headers.update({'content-type': 'application/json'})
 
-    def events(self, count=None, year=None, month=None):
+    def events(self, count=None, year=None, month=None, json_dump=False):
         """
             Get the events.
         """
@@ -55,12 +66,14 @@ class PyLevel2(object):
             else:
                 # invalid query
                 pass
+            if json_dump:
+                return json.dumps(to_return, cls=DatetimeEncoder)
             return to_return
         else:
             # Something bad happened
             pass
 
-    def spaceapi(self):
+    def spaceapi(self, json_dump=False):
         """
             Gives information about Level2.
         """
@@ -73,6 +86,8 @@ class PyLevel2(object):
             else:
                 # invalid query
                 pass
+            if json_dump:
+                return json.dumps(data, cls=DatetimeEncoder)
             return data
         else:
             # Something bad happened
